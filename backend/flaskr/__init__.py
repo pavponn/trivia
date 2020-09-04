@@ -8,6 +8,12 @@ from models import setup_db, Question, Category
 
 QUESTIONS_PER_PAGE = 10
 
+def format_categories(categories):
+  return {category.id : category.type for category in categories}
+
+def format_questions(questions):
+  return [question.format() for question in questions]
+
 def create_app(test_config=None):
   # create and configure the app
   app = Flask(__name__)
@@ -16,30 +22,49 @@ def create_app(test_config=None):
   '''
   @TODO: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
   '''
+  CORS(app)
+  '''
+  The after_request decorator to set Access-Control-Allow
+  '''
+  @app.after_request
+  def after_request(response):
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,true')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PATCH,POST,DELETE,OPTIONS')
+    return response
 
   '''
-  @TODO: Use the after_request decorator to set Access-Control-Allow
-  '''
-
-  '''
-  @TODO: 
   Create an endpoint to handle GET requests 
   for all available categories.
   '''
+  def get_categories():
+    categories = Category.query.order_by(Category.id).all()
 
+    # when throw error? 
+
+    return jsonify({
+      "success": True,
+      "categories": format_categories(categories)
+    })
 
   '''
-  @TODO: 
   Create an endpoint to handle GET requests for questions, 
   including pagination (every 10 questions). 
   This endpoint should return a list of questions, 
   number of total questions, current category, categories. 
-
-  TEST: At this point, when you start the application
-  you should see questions and categories generated,
-  ten questions per page and pagination at the bottom of the screen for three pages.
-  Clicking on the page numbers should update the questions. 
   '''
+  @app.route('/questions', methods=['GET'])
+  def get_questions():
+    page = request.args.get('page', 1, type=int)
+    questions = Question.query.paginate(page, QUESTIONS_PER_PAGE).items
+    
+    categories = Category.query.order_by(Category.id).all()
+    
+    return jsonify({
+      "success": True,
+      "questions": format_questions(questions),
+      "total_questions": Question.query.count(),
+      "categories": format_categories(categories)
+    })
 
   '''
   @TODO: 
@@ -98,6 +123,21 @@ def create_app(test_config=None):
   Create error handlers for all expected errors 
   including 404 and 422. 
   '''
+  @app.errorhandler(404)
+  def not_found(error):
+    return jsonify({
+      "success": False,
+      "error": 404,
+      "message": "Not found"
+    }), 404
+
+  @app.errorhandler(422)
+  def not_found(error):
+    return jsonify({
+      "success": False,
+      "error": 422,
+      "message": "Unprocessable Entity"
+    }), 422
   
   return app
 
