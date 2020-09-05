@@ -158,7 +158,7 @@ def create_app(test_config=None):
     body = request.get_json()
     print(str(request.get_json()))
     if not 'previous_questions' in body:
-      abort(422)
+      abort(400)
     try:
       category = body.get('quiz_category', None)
       prev_questions = set(body.get('previous_questions'))
@@ -196,6 +196,23 @@ def create_app(test_config=None):
       "error": 422,
       "message": "Unprocessable Entity"
     }), 422
+
+  @app.errorhandler(400)
+  def bad_request(error):
+     return jsonify({
+      "success": False,
+      "error": 400,
+      "message": "Bad request"
+    }), 400
+
+
+  @app.errorhandler(500)
+  def internal_server_error(error):
+    return jsonify({
+      "success": False,
+      "error": 500,
+      "message": "Bad request"
+    }), 500
   
   return app
 
