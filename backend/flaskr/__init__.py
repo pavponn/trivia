@@ -117,11 +117,11 @@ def create_app(test_config=None):
   is a substring of the question. 
   '''
   @app.route('/questions/search', methods=['POST'])
-  def search_qustions():
+  def search_questions():
     body = request.get_json()
     search_term = body.get('searchTerm', None)
     if not search_term:
-      abort(404)
+      abort(422)
     try:
       searched = Question.query.filter(func.lower(Question.question).contains(search_term.lower())).all()
       return jsonify({
@@ -177,8 +177,7 @@ def create_app(test_config=None):
   
 
   '''
-  Error handlers for all expected errors 
-  including 404 and 422. 
+  Error handlers for all expected errors. 
   '''
   @app.errorhandler(404)
   def not_found(error):
