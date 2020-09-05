@@ -139,6 +139,26 @@ class TriviaTestCase(unittest.TestCase):
         self.assertFalse(data['success'])
         self.assertEqual(data['message'], "Unprocessable Entity")
 
+    def test_search_questions(self):
+        search = { 'searchTerm': 'world'}
+        res = self.client().post('/questions/search', json=search)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data['success'])
+        self.assertTrue(len(data['questions']))
+        self.assertIsNotNone((data['total_questions']))
+    
+    def test_search_questions_invalid_search_400_error(self):
+        search = {}
+        res = self.client().post('/questions/search', json=search)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 422)
+        self.assertFalse(data['success'])
+        self.assertEqual(data['message'], "Unprocessable Entity")
+
+
 
 # Make the tests conveniently executable
 if __name__ == "__main__":
