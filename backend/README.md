@@ -72,23 +72,167 @@ One note before you delve into your tasks: for each endpoint you are expected to
 
 ### Endpoints
 
-- GET '/categories'
-- GET '/questions'
-- DELETE '/question/<question_id>'
-- POST '/questions'
-- POST '/questions/search/'
+- GET `/categories`
+- GET `/questions?page=<page_number>`
+- GET `/categories/<category_id>/questions`
+- POST `/questions`
+- POST `/questions/search/`
+- POST `/quizzes`
+- DELETE `/questions/<question_id>`
 
-GET '/categories'
+#### GET `/categories`
 
 - Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
 - Request Arguments: None
-- Returns: An object with a single key, categories, that contains a object of id: category_string key:value pairs.
-  {'1' : "Science",
+- Returns: An object with a single key, categories, that contains a object of id: category_string key:value pairs. Response example:
+
+```
+{
+  '1' : "Science",
   '2' : "Art",
   '3' : "Geography",
   '4' : "History",
   '5' : "Entertainment",
-  '6' : "Sports"}
+  '6' : "Sports"
+}
+```
+
+#### GET `/questions?page=<page_number>`
+
+- Fetches a list of questions by pages of size 10. Each question is stored as a map with keys `id`, `question`, `answer`, `category`, `difficulty`.
+- Request Arguments: page number (optional)
+- Returns an object, that stores list of questions and all categories. Response example:
+
+```
+{
+  "categories": {
+    "1": "Science",
+    "2": "Entertainment"
+  },
+  "questions": [
+    {
+      "answer": "Apollo 13",
+      "category": 2,
+      "difficulty": 4,
+      "id": 2,
+      "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+    }
+  ]
+}
+```
+
+#### GET `/categories/<category_id>/questions`
+
+- Fetches questions from specified category.
+- `category_id` - id of category to fetch questions for.
+- Returns an object that stores questions for given category. Response example:
+
+```
+{
+  "current_category": 1,
+  "questions": [
+    {
+      "answer": "The Liver",
+      "category": 1,
+      "difficulty": 4,
+      "id": 20,
+      "question": "What is the heaviest organ in the human body?"
+    }
+  ]
+}
+```
+
+#### POST `/questions`
+
+- Adds a new question to the database of available questions that are used in the game.
+- Request body example:
+
+```
+{
+  question: "question description",
+  answer: "anwser to the question",
+  difficulty: 1,
+  category: 1
+}
+```
+
+- Response example:
+
+```
+{
+  "success": true,
+  "created_question": 100
+}
+```
+
+#### POST `/questions/search/`
+
+- Fetches all the questions that contain specified substring in the question.
+- Request body:
+
+```
+{
+  "searchTerm" : "how many"
+}
+```
+
+- Response example:
+
+```
+{
+  "questions": [
+    {
+      "answer": "24",
+      "category": 3,
+      "difficulty": 1,
+      "id": 30,
+      "question": "How many hours in a day?"
+    }
+  ],
+  "success": true,
+  "total_questions": 1
+}
+```
+
+#### POST `/quizzes`
+
+- Fetches one random question within a specified category. A random question is taken from the question are not in `previous_questions` list.
+- Request body example:
+
+```
+{
+  "previous_questions": [1, 3],
+  "quiz_category": {"id": 1, type:"Scince"}
+}
+```
+
+- Returns a randomly picked question. Response example:
+
+```
+{
+  "question": {
+    "answer": "The Liver",
+    "category": 1,
+    "difficulty": 4,
+    "id": 20,
+    "question": "What is the heaviest organ in the human body?"
+  },
+  "success": true
+}
+```
+
+#### DELETE `/questions/<question_id>`
+
+- Deletes question with specified id from question database.
+- `category_id` - id of question to be deleted.
+- Response example:
+
+```
+{
+  "deleted_question": 309,
+  "success": true
+}
+```
 
 ## Testing
 
