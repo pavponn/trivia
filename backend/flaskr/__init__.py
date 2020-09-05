@@ -1,6 +1,7 @@
 import os
 from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import desc, func
 from flask_cors import CORS
 import random
 
@@ -20,9 +21,10 @@ def create_app(test_config=None):
   setup_db(app)
   
   '''
-  @TODO: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
+  Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
   '''
   CORS(app)
+  
   '''
   The after_request decorator to set Access-Control-Allow
   '''
@@ -117,7 +119,22 @@ def create_app(test_config=None):
   only question that include that string within their question. 
   Try using the word "title" to start. 
   '''
-
+  @app.route('/questions/search', methods=['POST'])
+  def search_qustions():
+    body = request.get_json()
+    search_term = body.get('searchTerm', None)
+    if not search_term:
+      abort(404)
+    try:
+      searched = Question.query.filter(func.lower(Question.question).contains(search_term.lower())).all()
+      return jsonify({
+        "success": True,
+        "questions": format_questions(searched),
+        "total_questions": len(searched),
+      })
+    except:
+      abort(422)
+ 
   '''
   @TODO: 
   Create a GET endpoint to get questions based on category. 
