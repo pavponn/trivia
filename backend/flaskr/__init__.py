@@ -52,7 +52,7 @@ def create_app(test_config=None):
 
 
   '''
-  The endpoint to handle GET requests for questions, 
+  GET endpoint to handle requests for questions, 
   including pagination (every 10 questions). 
   This endpoint returns a list of questions, 
   number of total questions, current category, categories. 
@@ -72,7 +72,7 @@ def create_app(test_config=None):
     })
 
   '''
-  The endpoint to DELETE question using a question ID. 
+  DELETE endpoint to delete question using a question ID. 
   '''
   @app.route('/questions/<int:question_id>', methods=['DELETE'])
   def delete_question(question_id):
@@ -87,7 +87,7 @@ def create_app(test_config=None):
       abort(422)
 
   '''
-  The endpoint to POST a new question, 
+  POST endpoint to add a new question, 
   which will require the question and answer text, 
   category, and difficulty score.
   '''
@@ -156,9 +156,8 @@ def create_app(test_config=None):
   @app.route('/quizzes', methods=['POST'])
   def play_game():
     body = request.get_json()
-    print(str(request.get_json()))
     if not 'previous_questions' in body:
-      abort(400)
+      abort(422)
     try:
       category = body.get('quiz_category', None)
       prev_questions = set(body.get('previous_questions'))
@@ -186,7 +185,7 @@ def create_app(test_config=None):
     return jsonify({
       "success": False,
       "error": 404,
-      "message": "Not found"
+      "message": "Not Found"
     }), 404
 
   @app.errorhandler(422)
@@ -202,7 +201,7 @@ def create_app(test_config=None):
      return jsonify({
       "success": False,
       "error": 400,
-      "message": "Bad request"
+      "message": "Bad Request"
     }), 400
 
 
@@ -211,7 +210,7 @@ def create_app(test_config=None):
     return jsonify({
       "success": False,
       "error": 500,
-      "message": "Bad request"
+      "message": "Internal Server Error"
     }), 500
   
   return app
