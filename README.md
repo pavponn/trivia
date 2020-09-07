@@ -4,6 +4,8 @@ Udacity is invested in creating bonding experiences for its employees and studen
 
 ## Trivia App Functionality
 
+Trivia app provides following functionality:
+
 1) Display questions - both all questions and by category. Questions should show the question, category and difficulty rating by default and can show/hide the answer. 
 2) Delete questions.
 3) Add questions and require that they include question and answer text.
@@ -20,7 +22,7 @@ Udacity is invested in creating bonding experiences for its employees and studen
 - PostgreSQL
 - SQLAlchemy
 
-[View the README.md within ./backend for more details.](backend/README.md). API documentation can be found there.
+[View the README.md within ./backend for more details](backend/README.md). API documentation can be found there.
 
 ### Frontend
 
@@ -30,7 +32,7 @@ Udacity is invested in creating bonding experiences for its employees and studen
 - CSS
 - Ajax
 
-[View the README.md within ./frontend for more details.](./frontend/README.md)
+[View the README.md within ./frontend for more details](./frontend/README.md).
 
 
 ## Copyright
