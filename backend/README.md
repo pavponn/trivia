@@ -1,4 +1,4 @@
-# Trivia API Backend
+# Trivia Backend
 
 [![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/pavponn/trivia/blob/master/LICENSE)
 
