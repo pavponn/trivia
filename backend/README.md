@@ -3,7 +3,6 @@
 [![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/pavponn/trivia/blob/master/LICENSE)
 
 ## Getting Started
-[![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/pavponn/trivia/blob/master/LICENSE)
 
 ### Installing Dependencies
 
